@@ -8,11 +8,11 @@ import java.awt.event.MouseMotionListener;
 import java.util.Vector;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import rs.jugomedia.internetadventure.UserInterface;
+import rs.jugomedia.internetadventure.page.PageInfo;
 
 public class TabControl extends JPanel implements MouseListener, MouseMotionListener {
 	
@@ -205,16 +205,4 @@ public class TabControl extends JPanel implements MouseListener, MouseMotionList
 	}
 }
 
-class PageInfo
-{
-	public PageInfo(String title) {
-		pageName = title;
-	}
-	public PageInfo() {
-		// TODO Auto-generated constructor stub
-	}
-	ImageIcon pageIcon = null;
-	String pageName = null;
-	String pageUrl = null;
-	String pageHTML = "";
-}
+

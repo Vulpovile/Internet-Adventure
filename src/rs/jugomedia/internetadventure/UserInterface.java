@@ -2,7 +2,6 @@ package rs.jugomedia.internetadventure;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,40 +19,20 @@ import java.awt.Color;
 import javax.swing.JButton;
 
 import rs.jugomedia.internetadventure.customcontrols.TabControl;
+import rs.jugomedia.internetadventure.jpapi.PluginManager;
+
 import javax.swing.JMenu;
 
 public class UserInterface extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textField;
+	StarterClass starter;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (InstantiationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		UserInterface frame = new UserInterface();
-		frame.setVisible(true);
-	}
 
-	/**
-	 * Create the frame.
-	 */
-	public UserInterface() {
+	public UserInterface(StarterClass starter) {
+		this.starter = starter;
 		setTitle("Internet Adventure");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 866, 711);
