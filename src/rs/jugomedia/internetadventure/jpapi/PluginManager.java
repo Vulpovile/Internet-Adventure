@@ -22,7 +22,6 @@ public class PluginManager {
 	public static final float API_VERSION = 0.1F;
 	private static final File pluginDir = Util.getPluginDir();
 	
-	
 	public PluginManager(StarterClass starterClass)
 	{
 		if(starterClass != null)
@@ -138,6 +137,14 @@ public class PluginManager {
 	final File getPluginDirectory(JavaPlugin jp) {
 		String className = names.get(jp);
 		return new File(pluginDir, className);
+	}
+	
+	/**
+	 * Returns the browser instance
+	 */
+	public UserInterface getBrowser()
+	{
+		return starterClass.getBrowser();
 	}
 	
 	

@@ -11,16 +11,11 @@ import javax.swing.border.BevelBorder;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
 import java.awt.Color;
 
 import javax.swing.JButton;
 
 import rs.jugomedia.internetadventure.customcontrols.TabControl;
-import rs.jugomedia.internetadventure.jpapi.PluginManager;
-
 import javax.swing.JMenu;
 
 public class UserInterface extends JFrame {
