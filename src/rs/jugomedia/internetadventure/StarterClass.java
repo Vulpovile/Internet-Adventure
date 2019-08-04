@@ -37,7 +37,7 @@ public class StarterClass {
 		StarterClass starter = new StarterClass();
 		starter.startUI();
 	}
-	public void startUI()
+	private void startUI()
 	{
 		
 		pm = new PluginManager(this);

@@ -11,35 +11,104 @@ import java.util.HashMap;
 import rs.jugomedia.internetadventure.StarterClass;
 import rs.jugomedia.internetadventure.UserInterface;
 import rs.jugomedia.internetadventure.Util;
-
+import rs.jugomedia.internetadventure.jpapi.event.Event;
+import rs.jugomedia.internetadventure.jpapi.event.EventListener;
+/**
+ * JPAPI (Jar Plugin API) Plugin Manager, general purpose plugin loader for Internet Adventure<br>
+ * Using URLClassLoader, To create plugins, refer to {@link JavaPlugin}
+ * @author Vulpovile
+ */
 public class PluginManager {
+	private static boolean isDefined = false;
 	private StarterClass starterClass;
 	private HashMap<String, JavaPlugin> plugins = new HashMap<String, JavaPlugin>();
 	private HashMap<JavaPlugin, String> names = new HashMap<JavaPlugin, String>();
+	private HashMap<Event.Type, ArrayList<RegisteredEvent>> events = new HashMap<Event.Type, ArrayList<RegisteredEvent>>();
 	/**
 	 * API version to allow usage of new features when possible, but keep compatible with older versions of JPAPI
 	 */
 	public static final float API_VERSION = 0.1F;
 	private static final File pluginDir = Util.getPluginDir();
 	
+	/**
+	 * Registers an event and returns a {@link RegisteredEvent} object that can be used to unregister the event.
+	 * <br>To unregister, use the {@link unregisterEvent} method
+	 * @return {@link RegisteredEvent}
+	 * @param {@link Event.Type} type
+	 * @param {@link EventListener} listener
+	 * @param {@link JavaPlugin} plugin
+	 * @param {@link Event.Priority} priority
+	 */
+	public RegisteredEvent registerEvent(Event.Type type, EventListener listener, JavaPlugin plugin, Event.Priority priority)
+	{
+		if(type != null && listener != null && plugin != null && priority != null)
+		{
+			RegisteredEvent event = new RegisteredEvent(type, listener, plugin, priority);
+			ArrayList<RegisteredEvent> evtList = events.get(type);
+			if(evtList == null)
+			{
+				evtList = new ArrayList<RegisteredEvent>();
+				events.put(type, evtList);
+			}
+			evtList.add(event);
+			return event;
+		}
+		return null;
+	}
+	
+	/**
+	 * Unregisters a registered event when passed a {@link RegisteredEvent} object
+	 * @param {@link RegisteredEvent} event
+	 */
+	public void unregisterEvent(RegisteredEvent event)
+	{
+		if(event != null)
+		{
+			ArrayList<RegisteredEvent> evtList = events.get(event.getType());
+			if(evtList != null)
+			{
+				evtList.remove(event);
+				if(evtList.size() == 0)
+				{
+					events.remove(event.getType());
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Used to instantiate a Plugin Manager.
+	 * This will throw an exception, do not use in a plugin
+	 */
 	public PluginManager(StarterClass starterClass)
 	{
+		if(isDefined)
+			throw new RuntimeException("PluginManager already defined");
+		isDefined = true;
 		if(starterClass != null)
-		this.starterClass = starterClass;
-		else throw new RuntimeException("no");
+			this.starterClass = starterClass;
+		else throw new RuntimeException("PluginManager cannot be defined without a valid StarterClass instance");
 		loadPlugins();
 	}
 	
 	/**
-	 * Returns the global plug-in directory for all plug-in.
-	 * Not for storing data for your plug-in
-	 * @return
+	 * Returns the global plugin directory for all plugin.
+	 * Not for storing data for your plugin
+	 * @return {@link java.io.File}
 	 */
 	public final File getGeneralPluginDirectory() {
-		// TODO Auto-generated method stub
 		return pluginDir;
 	}
-	//Should not be able to be called by plugins :/
+	/**
+	 * @deprecated
+	 * Reloads all the plugins
+	 * Unsafe, refrain from use
+	 */
+	public void reload()
+	{
+		
+	}
+	//Loads the plugins
 	private void loadPlugins()
 	{
 		if(!pluginDir.isDirectory())
@@ -73,13 +142,11 @@ public class PluginManager {
 				catch (Exception e)
 				{
 					//MinecraftServer.log.severe("Failed to load plugin " + pluginName+" (is it out of date?):");
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				catch (Error e)
 				{
 					//MinecraftServer.log.severe("Plugin " + pluginName+" crashed while attempting to load. (is it out of date?):");
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -101,13 +168,11 @@ public class PluginManager {
 				catch (Exception e)
 				{
 					//MinecraftServer.log.severe("Failed to load plugin " + name.get(i)+" (is it out of date?):");
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				catch (Error e)
 				{
 					//MinecraftServer.log.severe("Plugin " + name.get(i)+" crashed while attempting to load. (is it out of date?):");
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -120,13 +185,11 @@ public class PluginManager {
 				catch (Exception e)
 				{
 					//MinecraftServer.log.severe("Failed to load plugin " + name.get(i)+" (is it out of date?):");
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				catch (Error e)
 				{
 					//MinecraftServer.log.severe("Plugin " + name.get(i)+" crashed while attempting to load. (is it out of date?):");
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

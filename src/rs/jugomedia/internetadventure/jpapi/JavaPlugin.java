@@ -1,7 +1,13 @@
 package rs.jugomedia.internetadventure.jpapi;
 
 import java.io.File;
-
+/**
+ * JPAPI (Jar Plugin API) plugin class for creating your own plugins<br>
+ * Extend from this class to create your own plugins.<br><br>
+ * Each plugin must contain a plugin.info file, which on the first line contains the name<br>
+ * and on the second line contains the class path (com.example.plugin.MyPlugin)
+ * @author Vulpovile
+ */
 public abstract class JavaPlugin {
 	PluginManager pluginManager;
 	/**

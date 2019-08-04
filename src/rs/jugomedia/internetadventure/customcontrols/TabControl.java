@@ -23,9 +23,9 @@ public class TabControl extends JPanel implements MouseListener, MouseMotionList
 	private static final int tHeight = 25;
 	private static final int tGap = 2;
 	private static final long serialVersionUID = 1L;
-	Vector<PageInfo> pages = new Vector<PageInfo>();
-	PageInfo currentPage;
-	UserInterface mainInterface;
+	private Vector<PageInfo> pages = new Vector<PageInfo>();
+	private PageInfo currentPage;
+	private UserInterface mainInterface;
 	private int highTabIdx = -1;
 	
 	/**
