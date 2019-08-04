@@ -6,7 +6,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import rs.jugomedia.internetadventure.jpapi.PluginManager;
 import rs.jugomedia.internetadventure.jpapi.event.UIStateEvent;
 
-public class StarterClass {
+public class StarterClass{
 	PluginManager pm;
 	UserInterface browser;
 	public static void main(String args[])
@@ -56,8 +56,11 @@ public class StarterClass {
 				e.printStackTrace();
 			}
 		}
-		browser = new UserInterface(this);
-		browser.setVisible(true);
+		if(pm.processEvent(new UIStateEvent(UIStateEvent.State.UI_LOAD)))
+		{
+			browser = new UserInterface(this);
+			browser.setVisible(true);
+		}
 	}
 	public UserInterface getBrowser() {
 		// TODO Auto-generated method stub

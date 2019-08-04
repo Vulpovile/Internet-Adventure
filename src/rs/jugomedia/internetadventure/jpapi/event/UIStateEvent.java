@@ -4,7 +4,7 @@ public class UIStateEvent extends Event {
 	private State state;
 	public static enum State
 	{
-		UI_OPEN, UI_CLOSE, UI_HIDE, UI_UNHIDE, UI_MAX, UI_STYLIZE
+		UI_CLOSE, UI_HIDE, UI_MAX, UI_STYLIZE, UI_LOAD, UI_SHOW
 	}
 	public UIStateEvent(State state)
 	{

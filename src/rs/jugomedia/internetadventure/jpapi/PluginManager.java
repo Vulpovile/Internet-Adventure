@@ -67,7 +67,7 @@ public class PluginManager {
 		return null;
 	}
 	/**
-	 * 
+	 * Processes an event
 	 */
 	public boolean processEvent(Event evt)
 	{
