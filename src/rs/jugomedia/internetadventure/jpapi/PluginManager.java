@@ -32,7 +32,8 @@ public class PluginManager {
 	
 	/**
 	 * Registers an event and returns a {@link RegisteredEvent} object that can be used to unregister the event.
-	 * <br>To unregister, use the {@link unregisterEvent} method
+	 * <br>To unregister, use the {@link unregisterEvent} method.
+	 * <br>Returns null on invalid parameters
 	 * @return {@link RegisteredEvent}
 	 * @param {@link Event.Type} type
 	 * @param {@link EventListener} listener
@@ -41,6 +42,7 @@ public class PluginManager {
 	 */
 	public RegisteredEvent registerEvent(Event.Type type, EventListener listener, JavaPlugin plugin, Event.Priority priority)
 	{
+		System.out.println("Got event " + type);
 		if(type != null && listener != null && plugin != null && priority != null)
 		{
 			RegisteredEvent event = new RegisteredEvent(type, listener, plugin, priority);
@@ -50,14 +52,40 @@ public class PluginManager {
 				evtList = new ArrayList<RegisteredEvent>();
 				events.put(type, evtList);
 			}
+			
+			for(int i = 0; i < evtList.size(); i++)
+			{
+				System.out.println(evtList.get(i).getPriority().compareTo(priority));
+				if(evtList.get(i).getPriority().compareTo(priority) > 0)
+				{
+					System.out.println("Added after compare new " + names.get(plugin));
+					evtList.add(i, event);
+					return event;
+				}
+			}
 			evtList.add(event);
 			return event;
 		}
 		return null;
 	}
-	
+	/**
+	 * 
+	 */
+	public boolean processEvent(Event evt)
+	{
+		ArrayList<RegisteredEvent> evtList = events.get(evt.getType());
+		if(evtList != null)
+		{
+			for(int i = 0; i < evtList.size(); i++)
+			{
+				evtList.get(i).getListener().handle(evt);
+			}
+		}
+		return !evt.isCancelled();
+	}
 	/**
 	 * Unregisters a registered event when passed a {@link RegisteredEvent} object
+	 * Does nothing with invalid parameters
 	 * @param {@link RegisteredEvent} event
 	 */
 	public void unregisterEvent(RegisteredEvent event)
