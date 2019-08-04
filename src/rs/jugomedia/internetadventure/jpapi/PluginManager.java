@@ -42,7 +42,6 @@ public class PluginManager {
 	 */
 	public RegisteredEvent registerEvent(Event.Type type, EventListener listener, JavaPlugin plugin, Event.Priority priority)
 	{
-		System.out.println("Got event " + type);
 		if(type != null && listener != null && plugin != null && priority != null)
 		{
 			RegisteredEvent event = new RegisteredEvent(type, listener, plugin, priority);
@@ -58,7 +57,6 @@ public class PluginManager {
 				System.out.println(evtList.get(i).getPriority().compareTo(priority));
 				if(evtList.get(i).getPriority().compareTo(priority) > 0)
 				{
-					System.out.println("Added after compare new " + names.get(plugin));
 					evtList.add(i, event);
 					return event;
 				}
@@ -73,15 +71,19 @@ public class PluginManager {
 	 */
 	public boolean processEvent(Event evt)
 	{
-		ArrayList<RegisteredEvent> evtList = events.get(evt.getType());
-		if(evtList != null)
+		if(evt != null)
 		{
-			for(int i = 0; i < evtList.size(); i++)
+			ArrayList<RegisteredEvent> evtList = events.get(evt.getType());
+			if(evtList != null)
 			{
-				evtList.get(i).getListener().handle(evt);
+				for(int i = 0; i < evtList.size(); i++)
+				{
+					evtList.get(i).getListener().handle(evt);
+				}
 			}
+			return !evt.isCancelled();
 		}
-		return !evt.isCancelled();
+		else throw new RuntimeException("Event parameter cannot be null");
 	}
 	/**
 	 * Unregisters a registered event when passed a {@link RegisteredEvent} object
