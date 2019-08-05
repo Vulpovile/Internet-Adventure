@@ -8,6 +8,7 @@ import java.awt.event.MouseMotionListener;
 import java.util.Vector;
 
 import javax.swing.Icon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
@@ -19,7 +20,8 @@ public class TabControl extends JPanel implements MouseListener, MouseMotionList
 	/**
 	 * 
 	 */
-	private static final int tWidth = 150;
+	private static final int tMaxWidth = 180;
+	private static int tWidth = 150;
 	private static final int tHeight = 25;
 	private static final int tGap = 2;
 	private static final long serialVersionUID = 1L;
@@ -37,6 +39,8 @@ public class TabControl extends JPanel implements MouseListener, MouseMotionList
 		pages.add(new PageInfo());
 		pages.add(new PageInfo());
 		currentPage = new PageInfo("Selected Page");
+		currentPage.setPersistance(true);
+		currentPage.viewPort.add(new JLabel("Test"));
 		pages.add(currentPage);
 		pages.add(new PageInfo("Title"));
 		pages.add(new PageInfo());
@@ -77,7 +81,10 @@ public class TabControl extends JPanel implements MouseListener, MouseMotionList
 	}
 	public void paintComponent(Graphics g)
 	{
-		
+		if(pages.size() > 0)
+		{
+			tWidth = Math.min(tMaxWidth, this.getWidth()/pages.size() - TabControl.tHeight);
+		}
 		int gradProgress = 2;
 		super.paintComponent(g);
 		g.setColor(this.getBackground().darker().darker());
@@ -110,9 +117,9 @@ public class TabControl extends JPanel implements MouseListener, MouseMotionList
 				ico.paintIcon(this, g, i*tWidth+3, tGap+3);
 			}
 			String title = "Blank page";
-			if(page.pageName != null)
+			if(page.pageName != null && page.pageName.length() > 0)
 				title = page.pageName;
-			else if(page.pageUrl != null)
+			else if(page.pageUrl != null && page.pageUrl.length() > 0)
 				title = page.pageUrl;
 			g.setColor(Color.BLACK);
 			g.drawString(title, i*tWidth+22, tGap+18);
@@ -168,9 +175,24 @@ public class TabControl extends JPanel implements MouseListener, MouseMotionList
 		int tab = getPageUnderMouse(e.getX(), e.getY());
 		if(tab != -1)
 		{
-			currentPage = pages.get(tab);
-			repaint();
+			setSelected(tab);
 		}
+	}
+	private void setSelected(int tab) {
+		if(currentPage != null)
+		{
+			currentPage.pageUrl = this.mainInterface.getURLBar().getText();
+			if(!currentPage.isPersistant())
+			{
+				currentPage.viewPort.removeAll();
+			}
+		}
+		//this.mainInterface.getScrollPane().removeAll();
+		currentPage = pages.get(tab);
+		this.mainInterface.getScrollPane().setViewportView(currentPage.viewPort);
+		this.mainInterface.getURLBar().setText(currentPage.pageUrl);
+		repaint();
+		this.mainInterface.repaint();
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {

@@ -16,7 +16,7 @@ public abstract class Event {
 
 	public static enum Type
 	{
-		NONE, UI_STATE
+		NONE, UI_STATE, RENDER_REQUEST
 	}
 	/**
 	 * The order in which an EventListener will be called. <br>
