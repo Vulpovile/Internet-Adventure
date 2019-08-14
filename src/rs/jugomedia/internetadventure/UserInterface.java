@@ -32,7 +32,8 @@ public class UserInterface extends JFrame implements WindowListener{
 	private StarterClass starter;
 	private TabControl tabControl = new TabControl(this);
 	private JScrollPane scrlViewPort = new JScrollPane();
-	
+	private JProgressBar progressBar = new JProgressBar();
+	private JLabel lblProgress = new JLabel("Done");
 	public TabControl getTabControl()
 	{
 		return tabControl;
@@ -60,10 +61,9 @@ public class UserInterface extends JFrame implements WindowListener{
 		contentPane.add(panel, BorderLayout.SOUTH);
 		panel.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblProgress = new JLabel("Done");
+		
 		panel.add(lblProgress, BorderLayout.WEST);
 		
-		JProgressBar progressBar = new JProgressBar();
 		panel.add(progressBar, BorderLayout.EAST);
 		
 		JPanel panel_1 = new JPanel();
@@ -163,6 +163,15 @@ public class UserInterface extends JFrame implements WindowListener{
 
 	public JScrollPane getScrollPane() {
 		return scrlViewPort;
+	}
+
+	public JProgressBar getProgressBar() {
+		return this.progressBar;
+	}
+
+	public JLabel getProgressText() {
+		// TODO Auto-generated method stub
+		return lblProgress;
 	}
 
 }

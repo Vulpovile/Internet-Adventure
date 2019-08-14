@@ -35,15 +35,15 @@ public class TabControl extends JPanel implements MouseListener, MouseMotionList
 	 */
 	public TabControl(UserInterface mainInterface) {
 		this.mainInterface = mainInterface;	
-		pages.add(new PageInfo("Title"));
-		pages.add(new PageInfo());
-		pages.add(new PageInfo());
-		currentPage = new PageInfo("Selected Page");
+		pages.add(new PageInfo("Title", this));
+		pages.add(new PageInfo(this));
+		pages.add(new PageInfo(this));
+		currentPage = new PageInfo("Selected Page",this);
 		currentPage.setPersistance(true);
-		currentPage.viewPort.add(new JLabel("Test"));
+		currentPage.getViewPort().add(new JLabel("Test"));
 		pages.add(currentPage);
-		pages.add(new PageInfo("Title"));
-		pages.add(new PageInfo());
+		pages.add(new PageInfo("Title", this));
+		pages.add(new PageInfo(this));
 		addMouseListener(this);
 		addMouseMotionListener(this);
 	}
@@ -109,18 +109,18 @@ public class TabControl extends JPanel implements MouseListener, MouseMotionList
 				g.drawLine(i*tWidth, j+tGap+1, i*tWidth+tWidth-1+j, j+tGap+1);
 			}
 			//Draw the icon and text
-			if(page.pageIcon != null)
-				g.drawImage(page.pageIcon.getImage(), i*tWidth+3, tGap+3, 16, 16, this);
+			if(page.getPageIcon() != null)
+				g.drawImage(page.getPageIcon().getImage(), i*tWidth+3, tGap+3, 16, 16, this);
 			else
 			{
 				Icon ico = UIManager.getIcon("FileView.fileIcon");
 				ico.paintIcon(this, g, i*tWidth+3, tGap+3);
 			}
 			String title = "Blank page";
-			if(page.pageName != null && page.pageName.length() > 0)
-				title = page.pageName;
-			else if(page.pageUrl != null && page.pageUrl.length() > 0)
-				title = page.pageUrl;
+			if(page.getPageName() != null && page.getPageName().length() > 0)
+				title = page.getPageName();
+			else if(page.getPageURL() != null && page.getPageURL().length() > 0)
+				title = page.getPageURL();
 			g.setColor(Color.BLACK);
 			g.drawString(title, i*tWidth+22, tGap+18);
 			//Draw the lines
@@ -146,18 +146,18 @@ public class TabControl extends JPanel implements MouseListener, MouseMotionList
 				g.drawLine(i*tWidth, j+tGap+1, i*tWidth+tWidth-1+j, j+tGap+1);
 			}
 			//Draw the icon and text
-			if(currentPage.pageIcon != null)
-				g.drawImage(currentPage.pageIcon.getImage(), i*tWidth+3, tGap+3, 16, 16, this);
+			if(currentPage.getPageIcon() != null)
+				g.drawImage(currentPage.getPageIcon().getImage(), i*tWidth+3, tGap+3, 16, 16, this);
 			else
 			{
 				Icon ico = UIManager.getIcon("FileView.fileIcon");
 				ico.paintIcon(this, g, i*tWidth+3, tGap+3);
 			}
 			String title = "Blank page";
-			if(currentPage.pageName != null)
-				title = currentPage.pageName;
-			else if(currentPage.pageUrl != null)
-				title = currentPage.pageUrl;
+			if(currentPage.getPageName() != null)
+				title = currentPage.getPageName();
+			else if(currentPage.getPageURL() != null)
+				title = currentPage.getPageURL();
 			g.setColor(Color.BLACK);
 			g.drawString(title, i*tWidth+22, tGap+18);
 			//Draw the lines
@@ -181,16 +181,16 @@ public class TabControl extends JPanel implements MouseListener, MouseMotionList
 	private void setSelected(int tab) {
 		if(currentPage != null)
 		{
-			currentPage.pageUrl = this.mainInterface.getURLBar().getText();
+			currentPage.setPageURL(this.mainInterface.getURLBar().getText());
 			if(!currentPage.isPersistant())
 			{
-				currentPage.viewPort.removeAll();
+				currentPage.getViewPort().removeAll();
 			}
 		}
 		//this.mainInterface.getScrollPane().removeAll();
 		currentPage = pages.get(tab);
-		this.mainInterface.getScrollPane().setViewportView(currentPage.viewPort);
-		this.mainInterface.getURLBar().setText(currentPage.pageUrl);
+		this.mainInterface.getScrollPane().setViewportView(currentPage.getViewPort());
+		this.mainInterface.getURLBar().setText(currentPage.getPageURL());
 		repaint();
 		this.mainInterface.repaint();
 	}
@@ -224,6 +224,13 @@ public class TabControl extends JPanel implements MouseListener, MouseMotionList
 	public void mouseMoved(MouseEvent e) {
 		highTabIdx = getPageUnderMouse(e.getX(), e.getY());
 		repaint();
+	}
+	public boolean isCurrentPage(PageInfo pageInfo) {
+		return currentPage == pageInfo;
+	}
+	public UserInterface getMainInterface() {
+		// TODO Auto-generated method stub
+		return mainInterface;
 	}
 }
 
