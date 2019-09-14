@@ -2,6 +2,7 @@ package rs.jugomedia.internetadventure.jpapi;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -67,7 +68,7 @@ public class PluginManager {
 		return null;
 	}
 	/**
-	 * Processes an event
+	 * Processes an event, Returns true if event should continue
 	 */
 	public boolean processEvent(Event evt)
 	{
@@ -167,6 +168,7 @@ public class PluginManager {
 						urls.add(jars[i].toURI().toURL());
 						mainClass.add(mainClassStr);
 						name.add(pluginName);
+						classLoader.close();
 					}
 				}
 				catch (Exception e)
@@ -222,6 +224,12 @@ public class PluginManager {
 					//MinecraftServer.log.severe("Plugin " + name.get(i)+" crashed while attempting to load. (is it out of date?):");
 					e.printStackTrace();
 				}
+			}
+			try {
+				classLoader.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}

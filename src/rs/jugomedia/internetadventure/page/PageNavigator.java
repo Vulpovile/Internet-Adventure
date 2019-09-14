@@ -61,6 +61,7 @@ public class PageNavigator {
 		}
 		in.close();
 		page.setProgress(page.getMaxProgress());
+		page.setProgressText("Transferred.");
 		return bytearr;
 	}
 	

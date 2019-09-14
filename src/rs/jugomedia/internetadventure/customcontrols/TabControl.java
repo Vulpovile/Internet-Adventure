@@ -10,9 +10,11 @@ import java.util.Vector;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextPane;
 import javax.swing.UIManager;
 
 import rs.jugomedia.internetadventure.UserInterface;
+import rs.jugomedia.internetadventure.jpapi.event.RenderRequestEvent;
 import rs.jugomedia.internetadventure.page.PageInfo;
 
 public class TabControl extends JPanel implements MouseListener, MouseMotionListener {
@@ -41,6 +43,7 @@ public class TabControl extends JPanel implements MouseListener, MouseMotionList
 		currentPage = new PageInfo("Selected Page",this);
 		currentPage.setPersistance(true);
 		currentPage.getViewPort().add(new JLabel("Test"));
+		mainInterface.getScrollPane().setViewportView(currentPage.getViewPort());
 		pages.add(currentPage);
 		pages.add(new PageInfo("Title", this));
 		pages.add(new PageInfo(this));
@@ -189,6 +192,22 @@ public class TabControl extends JPanel implements MouseListener, MouseMotionList
 		}
 		//this.mainInterface.getScrollPane().removeAll();
 		currentPage = pages.get(tab);
+		if(this.currentPage != null)
+		{
+			if(!this.currentPage.isPersistant())
+			{
+				if(!this.getMainInterface().getPluginManager().processEvent(new RenderRequestEvent(currentPage)) && currentPage.getViewPort().getComponentCount() == 0)
+				{
+					//Browser must now somehow render without any renderer!
+					//Just puts everything onto a textarea in the viewport
+					JTextPane text = new JTextPane();
+					text.setEditable(false);
+					text.setText(currentPage.getPageHTML());
+					text.setContentType("text/html");
+					currentPage.getViewPort().add(text);
+				}
+			}
+		}
 		this.mainInterface.getScrollPane().setViewportView(currentPage.getViewPort());
 		this.mainInterface.getURLBar().setText(currentPage.getPageURL());
 		repaint();
@@ -231,6 +250,10 @@ public class TabControl extends JPanel implements MouseListener, MouseMotionList
 	public UserInterface getMainInterface() {
 		// TODO Auto-generated method stub
 		return mainInterface;
+	}
+	public PageInfo getCurrentPage()
+	{
+		return currentPage;
 	}
 }
 

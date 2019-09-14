@@ -14,31 +14,38 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 
 import rs.jugomedia.internetadventure.customcontrols.TabControl;
+import rs.jugomedia.internetadventure.jpapi.PluginManager;
 import rs.jugomedia.internetadventure.jpapi.event.UIStateEvent;
 
 import javax.swing.JMenu;
 
-public class UserInterface extends JFrame implements WindowListener{
+public class UserInterface extends JFrame implements WindowListener, ActionListener{
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtFieldUrl;
 	private StarterClass starter;
-	private TabControl tabControl = new TabControl(this);
 	private JScrollPane scrlViewPort = new JScrollPane();
 	private JProgressBar progressBar = new JProgressBar();
 	private JLabel lblProgress = new JLabel("Done");
+	private JButton btnGo;
+	private TabControl tabControl = new TabControl(this);
 	public TabControl getTabControl()
 	{
 		return tabControl;
 	}
-
+	public StarterClass getStarterClass()
+	{
+		return starter;
+	}
 	UserInterface(StarterClass starter) {
 		addWindowListener(this);
 		this.starter = starter;
@@ -86,13 +93,14 @@ public class UserInterface extends JFrame implements WindowListener{
 		JPanel panel_5 = new JPanel();
 		panel_4.add(panel_5, BorderLayout.WEST);
 		
-		JButton btnGo = new JButton(">");
+		btnGo = new JButton(">");
 		panel_4.add(btnGo, BorderLayout.EAST);
 		
 		
 		scrlViewPort.setBackground(Color.WHITE);
 		scrlViewPort.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		contentPane.add(scrlViewPort, BorderLayout.CENTER);
+		btnGo.addActionListener(this);
 	}
 
 	@Override
@@ -172,6 +180,18 @@ public class UserInterface extends JFrame implements WindowListener{
 	public JLabel getProgressText() {
 		// TODO Auto-generated method stub
 		return lblProgress;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		if(arg0.getSource() == btnGo)
+		{
+			if(this.tabControl.getCurrentPage() != null)
+				this.tabControl.getCurrentPage().callNavigate();
+		}
+	}
+	public PluginManager getPluginManager() {
+		return this.starter.pm;
 	}
 
 }
